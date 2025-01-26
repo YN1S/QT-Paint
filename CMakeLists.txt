@@ -14,7 +14,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         main.cpp
-
+        drawingwidget.cpp
 
 )
 
@@ -22,6 +22,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(paint
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        drawingwidget.h drawingwidget.cpp
+        mainwindow.h mainwindow.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET paint APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
