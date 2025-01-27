@@ -21,6 +21,9 @@ public:
         QAction *connectionAction = toolbar->addAction("Связь");
         QAction *moveAction = toolbar->addAction("Переместить");
         QAction *deleteAction = toolbar->addAction("Удалить");
+        QAction *saveAction = toolbar->addAction("Сохранить");
+        QAction *loadAction = toolbar->addAction("Загрузить");
+
 
         connect(deleteAction, &QAction::triggered, [=]() {
             drawingWidget->setShapeType(Delete);
@@ -39,6 +42,19 @@ public:
         });
         connect(moveAction, &QAction::triggered, [=]() {
             drawingWidget->setShapeType(Move);
+        });
+        connect(saveAction, &QAction::triggered, [this]() {
+            QString fileName = QFileDialog::getSaveFileName(this, "Сохранить файл", "", "JSON Files (*.json)");
+            if (!fileName.isEmpty()) {
+                drawingWidget->saveToFile(fileName);
+            }
+        });
+
+        connect(loadAction, &QAction::triggered, [this]() {
+            QString fileName = QFileDialog::getOpenFileName(this, "Загрузить файл", "", "JSON Files (*.json)");
+            if (!fileName.isEmpty()) {
+                drawingWidget->loadFromFile(fileName);
+            }
         });
     }
 

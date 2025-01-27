@@ -1,12 +1,105 @@
 #include "drawingwidget.h"
 #include <QMouseEvent>
 #include <QPainter>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QFile>
+#include <QMessageBox>
 
 DrawingWidget::DrawingWidget(QWidget *parent) : QWidget(parent), currentShape(Rectangle), isDrawing(false), isConnecting(false) {}
 
 void DrawingWidget::setShapeType(ShapeType type) {
     currentShape = type;
 }
+
+void DrawingWidget::saveToFile(const QString &fileName)
+{
+    QJsonArray shapesArray;
+
+    for (const Shape &shape : shapes) {
+        QJsonObject shapeObject;
+        shapeObject["type"] = shape.type;
+        shapeObject["x"] = shape.boundingBox.x();
+        shapeObject["y"] = shape.boundingBox.y();
+        shapeObject["width"] = shape.boundingBox.width();
+        shapeObject["height"] = shape.boundingBox.height();
+        shapesArray.append(shapeObject);
+    }
+
+    QJsonArray connectionsArray;
+
+    for (const ConnectionLine &connection : connections) {
+        QJsonObject connectionObject;
+        connectionObject["startX"] = connection.start.x();
+        connectionObject["startY"] = connection.start.y();
+        connectionObject["endX"] = connection.end.x();
+        connectionObject["endY"] = connection.end.y();
+        connectionsArray.append(connectionObject);
+    }
+
+    QJsonObject rootObject;
+    rootObject["shapes"] = shapesArray;
+    rootObject["connections"] = connectionsArray;
+
+    QJsonDocument doc(rootObject);
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+        QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл для записи.");
+        return;
+    }
+
+    file.write(doc.toJson());
+    file.close();
+}
+
+void DrawingWidget::loadFromFile(const QString &fileName)
+{
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл для чтения.");
+        return;
+    }
+
+    QByteArray data = file.readAll();
+    file.close();
+
+    QJsonDocument doc = QJsonDocument::fromJson(data);
+    if (!doc.isObject()) {
+        QMessageBox::warning(this, "Ошибка", "Некорректный формат файла.");
+        return;
+    }
+
+    QJsonObject rootObject = doc.object();
+
+    shapes.clear();
+    connections.clear();
+
+    QJsonArray shapesArray = rootObject["shapes"].toArray();
+    for (const QJsonValue &value : shapesArray) {
+        QJsonObject shapeObject = value.toObject();
+        ShapeType type = static_cast<ShapeType>(shapeObject["type"].toInt());
+        qreal x = shapeObject["x"].toDouble();
+        qreal y = shapeObject["y"].toDouble();
+        qreal width = shapeObject["width"].toDouble();
+        qreal height = shapeObject["height"].toDouble();
+        shapes.append({type, QRectF(x, y, width, height)});
+    }
+
+    QJsonArray connectionsArray = rootObject["connections"].toArray();
+    for (const QJsonValue &value : connectionsArray) {
+        QJsonObject connectionObject = value.toObject();
+        QPointF start(connectionObject["startX"].toDouble(), connectionObject["startY"].toDouble());
+        QPointF end(connectionObject["endX"].toDouble(), connectionObject["endY"].toDouble());
+        connections.append({start, end});
+    }
+
+    update();
+}
+
+
+
 
 void DrawingWidget::mousePressEvent(QMouseEvent *event) {
     if (currentShape == Delete) {

@@ -5,6 +5,7 @@
 #include <QList>
 #include <QPointF>
 #include <QRectF>
+#include <QFileDialog>
 
 enum ShapeType {
     Rectangle,
@@ -34,6 +35,8 @@ class DrawingWidget : public QWidget {
 public:
     explicit DrawingWidget(QWidget *parent = nullptr);
     void setShapeType(ShapeType type);
+    void saveToFile(const QString &fileName);
+    void loadFromFile(const QString &fileName);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
