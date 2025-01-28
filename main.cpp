@@ -1,9 +1,7 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QToolBar>
-#include "drawingwidget.h"
 #include "mainwindow.h"
-
 
 
 int main(int argc, char *argv[]) {
@@ -16,4 +14,4 @@ int main(int argc, char *argv[]) {
     return app.exec();
 }
 
-#include "main.moc"
+// #include "main.moc"
