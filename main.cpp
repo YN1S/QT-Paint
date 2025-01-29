@@ -1,17 +1,13 @@
 #include <QApplication>
-#include <QMainWindow>
-#include <QToolBar>
-#include "mainwindow.h"
+#include "mywindow.h"
 
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
 
-int main(int argc, char *argv[]) {
-    QApplication app(argc, argv);
+    MyWindow paint;
 
-    MainWindow window;
-    window.resize(800, 600);
-    window.show();
+    paint.show();
 
-    return app.exec();
+    return a.exec();
 }
-
-// #include "main.moc"
