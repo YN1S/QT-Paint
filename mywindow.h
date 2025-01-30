@@ -6,6 +6,7 @@
 
 #include "paint.h"
 #include "strategy/action_strategy.h"
+#include "strategy/move_strategy.h"
 #include "strategy/shapes_strategy.h"
 
 enum class StrategyButton
@@ -32,9 +33,10 @@ private:
     std::map<QObject*, StrategyButton> _buttonMap;
     std::map<StrategyButton, std::function<std::unique_ptr<ActionStrategy>(void)>> _strategyFactory
     {
-        // {StrategyButton::ellipse, [this](){return std::make_unique<ShapesStrategy>(_paint, ShapeType::ellipse);}},
-        {StrategyButton::rectangle, [this](){ return std::make_unique<ShapesStrategy>(_paint, ShapeType::rectangle); }}
-        // {StrategyButton::triangle, [this](){return std::make_unique<ShapesStrategy>(_paint, ShapeType::triangle);}}
+        {StrategyButton::ellipse, [this](){return std::make_unique<ShapesStrategy>(_paint, ShapeType::ellipse);}},
+        {StrategyButton::rectangle, [this](){ return std::make_unique<ShapesStrategy>(_paint, ShapeType::rectangle); }},
+        {StrategyButton::triangle, [this](){return std::make_unique<ShapesStrategy>(_paint, ShapeType::triangle);}},
+        {StrategyButton::move, [this](){return std::make_unique<MoveStrategy>(_paint);}}
     }; 
 
     void strategyButtonPressed();

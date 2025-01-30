@@ -28,3 +28,8 @@ QPoint Rectangle::center() const
 {
     return _rect.center();
 }
+
+QRect Rectangle::boundingRect() const
+{
+    return _rect;
+}

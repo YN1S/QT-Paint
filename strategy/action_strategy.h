@@ -24,7 +24,6 @@ public:
     virtual void mouseMoveEvent(QMouseEvent *event) = 0;
     virtual void keyPressEvent(QKeyEvent* event) = 0;
     virtual void mouseReleaseEvent(QMouseEvent *event) = 0;
-    virtual void paintEvent(QPaintEvent *event) = 0;
 
     virtual void drawTemporary(QPainter* painter) = 0;
 

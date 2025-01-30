@@ -13,6 +13,7 @@ public:
     void resize(const QRect& newBounds) override;
     void move(const QPoint& delta) override;
     QPoint center() const override;
+    QRect boundingRect() const override;
 
 private:
     QRect _rect;

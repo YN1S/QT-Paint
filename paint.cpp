@@ -17,6 +17,11 @@ void Paint::addShape(std::unique_ptr<DefaultShape> shape)
     _shapes.push_back(std::move(shape));
 }
 
+const std::vector<std::unique_ptr<DefaultShape> > &Paint::shapes() const
+{
+    return _shapes;
+}
+
 void Paint::mousePressEvent(QMouseEvent *event)
 {
     if (_strategy) {_strategy->mousePressEvent(event);}

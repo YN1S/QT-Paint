@@ -22,6 +22,9 @@ public:
     virtual void resize(const QRect& newBounds) = 0; 
     virtual void move(const QPoint& delta) = 0; 
     virtual QPoint center() const = 0; 
+    virtual QRect boundingRect() const = 0;
+
+    DefaultShape* findShape(const QPoint& pos) const;
 
 protected:
     ShapeType _type;

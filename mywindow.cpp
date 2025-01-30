@@ -20,10 +20,13 @@ QToolBar* MyWindow::createLayout()
     QPushButton* rectangleButton = createStrategyButton("Прямоугольник", StrategyButton::rectangle);
     QPushButton* triangleButton = createStrategyButton("Треугольник", StrategyButton::triangle);
     QPushButton* ellipseButton = createStrategyButton("Эллипс", StrategyButton::ellipse);
+    QPushButton* moveButton = createStrategyButton("Переместить", StrategyButton::move);
 
     toolbar->addWidget(rectangleButton);
     toolbar->addWidget(triangleButton);
     toolbar->addWidget(ellipseButton);
+    toolbar->addSeparator();
+    toolbar->addWidget(moveButton);
 
     return toolbar;
 }

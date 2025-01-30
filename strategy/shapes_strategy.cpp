@@ -30,12 +30,6 @@ void ShapesStrategy::mouseMoveEvent(QMouseEvent* event)
     }
 }
 
-void ShapesStrategy::paintEvent(QPaintEvent *event)
-{
-    // Если нужно рисовать, добавь код для отрисовки формы
-    // _currentShape->draw(painter);
-}
-
 void ShapesStrategy::mouseReleaseEvent(QMouseEvent* event)
 {
     if(_isDrawning)
