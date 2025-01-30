@@ -5,6 +5,8 @@
 #include "shapes/shapes_types.h"
 #include "shapes/default_shape.h"
 
+class DefaultShape;
+
 class ShapesStrategy : public ActionStrategy
 {
 public:

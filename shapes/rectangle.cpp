@@ -33,3 +33,14 @@ QRect Rectangle::boundingRect() const
 {
     return _rect;
 }
+
+QJsonObject Rectangle::toJson() const
+{
+    QJsonObject obj;
+    obj["type"] = "Rectangle";
+    obj["x"] = _rect.x();
+    obj["y"] = _rect.y();
+    obj["width"] = _rect.width();
+    obj["height"] = _rect.height();
+    return obj;
+}

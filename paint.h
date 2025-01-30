@@ -8,14 +8,18 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QFile>
-#include <QDataStream>
-#include <QByteArray>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QJsonDocument>
 #include <QMessageBox>
 
 #include "strategy/action_strategy.h"
 #include "shapes/default_shape.h"
 
+struct ConnectionLine {
+    QPointF start;
+    QPointF end;
+};
 
 class Paint : public QFrame
 {
@@ -25,8 +29,18 @@ public:
 
     void setStrategy(std::unique_ptr<ActionStrategy> strategy);
     void addShape(std::unique_ptr<DefaultShape> shape);
+    void addConnection(ConnectionLine connection);
+    void removeShape(DefaultShape* shapeToRemove);
+    void removeConnection(DefaultShape* shapeWithBounds);
+    void moveConnection(DefaultShape* shapeWithBounds, QPointF delta);
+    void revertConnections(DefaultShape* shapeWithBounds);
+
 
     const std::vector<std::unique_ptr<DefaultShape>>& shapes() const;
+    const QList<ConnectionLine>& connections() const;
+
+    void loadFromFile(QFile& file);
+    void saveToFile(QFile& file) const;
 
   protected:
     void mousePressEvent(QMouseEvent* event) override;
@@ -40,5 +54,6 @@ private:
     std::unique_ptr<ActionStrategy> _strategy;
 
     std::vector<std::unique_ptr<DefaultShape>> _shapes;
+    QList<ConnectionLine> _connections;
 };
 

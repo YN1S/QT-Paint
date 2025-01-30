@@ -1,7 +1,7 @@
 #include "ellipse.h"
 
 Ellipse::Ellipse(const QRect& rect)
-    : DefaultShape(ShapeType::rectangle), _rect{rect}
+    : DefaultShape(ShapeType::ellipse), _rect{rect}
 {}
 
 void Ellipse::draw(QPainter* painter)
@@ -32,4 +32,15 @@ QPoint Ellipse::center() const
 QRect Ellipse::boundingRect() const
 {
     return _rect;
+}
+
+QJsonObject Ellipse::toJson() const
+{
+    QJsonObject obj;
+    obj["type"] = "Ellipse";
+    obj["x"] = _rect.x();
+    obj["y"] = _rect.y();
+    obj["width"] = _rect.width();
+    obj["height"] = _rect.height();
+    return obj;
 }

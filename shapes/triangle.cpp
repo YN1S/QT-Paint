@@ -1,40 +1,64 @@
 #include "triangle.h"
 
-Triangle::Triangle(const QRect& rect)
-    : DefaultShape(ShapeType::rectangle), _rect{rect}
+Triangle::Triangle(const QPolygon& polygon)
+    : DefaultShape(ShapeType::triangle), _polygon(polygon)
 {}
 
 void Triangle::draw(QPainter* painter)
 {
-    QPointF points[3];
-    points[0] = QPointF(_rect.left() + _rect.width() / 2.0, _rect.top());   // Верхняя вершина
-    points[1] = QPointF(_rect.left(), _rect.bottom());                      // Левая нижняя вершина
-    points[2] = QPointF(_rect.right(), _rect.bottom());                     // Правая нижняя вершина
-
-    painter->drawPolygon(points, 3);
+    painter->drawPolygon(_polygon); 
 }
 
 bool Triangle::contains(const QPoint& point) const
 {
-    return _rect.contains(point);
+    return _polygon.containsPoint(point, Qt::OddEvenFill);
 }
 
 void Triangle::resize(const QRect& newBounds)
 {
-    _rect = newBounds;
+    // Убедимся, что полигон имеет три точки
+    if (_polygon.size() < 3) {
+        _polygon = QPolygon(3); // Создаем полигон с тремя точками
+    }
+
+    QPoint center = newBounds.center();
+    int width = newBounds.width();
+    int height = newBounds.height();
+
+    // Обновляем вершины
+    _polygon[0] = QPoint(center.x(), center.y() - height / 2);
+    _polygon[1] = QPoint(center.x() - width / 2, center.y() + height / 2);
+    _polygon[2] = QPoint(center.x() + width / 2, center.y() + height / 2);
 }
+
 
 void Triangle::move(const QPoint& delta)
 {
-    _rect.translate(delta);
+    _polygon.translate(delta);
 }
 
 QPoint Triangle::center() const
 {
-    return _rect.center();
+     return _polygon.boundingRect().center();
 }
 
 QRect Triangle::boundingRect() const
 {
-    return _rect;
+     return _polygon.boundingRect(); 
+}
+
+QJsonObject Triangle::toJson() const
+{
+    QJsonObject obj;
+    obj["type"] = "Triangle";
+
+    // Заполняем координаты для вершин треугольника
+    obj["x1"] = _polygon[0].x();
+    obj["y1"] = _polygon[0].y();
+    obj["x2"] = _polygon[1].x();
+    obj["y2"] = _polygon[1].y();
+    obj["x3"] = _polygon[2].x();
+    obj["y3"] = _polygon[2].y();
+
+    return obj;
 }

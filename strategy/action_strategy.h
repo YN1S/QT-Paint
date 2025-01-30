@@ -4,6 +4,7 @@
 #include <QMouseEvent>
 
 class Paint;
+class DefaultShape;
 
 enum class StrategyType
 {
@@ -28,6 +29,7 @@ public:
     virtual void drawTemporary(QPainter* painter) = 0;
 
     virtual void cancel() = 0;
+    DefaultShape* findShape(const QPoint& pos) const;
 
 protected:
     Paint* _context;

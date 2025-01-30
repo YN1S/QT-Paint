@@ -6,6 +6,7 @@
 #include <QRect>
 #include <QPolygon>
 #include <QString>
+#include <QJsonObject>
 
 #include "shapes_types.h"
 
@@ -24,8 +25,8 @@ public:
     virtual QPoint center() const = 0; 
     virtual QRect boundingRect() const = 0;
 
-    DefaultShape* findShape(const QPoint& pos) const;
-
+    virtual QJsonObject toJson() const = 0;
+    static std::unique_ptr<DefaultShape> fromJson(const QJsonObject &obj);
 protected:
     ShapeType _type;
 };

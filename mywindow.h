@@ -6,8 +6,10 @@
 
 #include "paint.h"
 #include "strategy/action_strategy.h"
+#include "strategy/connection_strategy.h"
 #include "strategy/move_strategy.h"
 #include "strategy/shapes_strategy.h"
+#include "strategy/delete_strategy.h"
 
 enum class StrategyButton
 {
@@ -36,11 +38,17 @@ private:
         {StrategyButton::ellipse, [this](){return std::make_unique<ShapesStrategy>(_paint, ShapeType::ellipse);}},
         {StrategyButton::rectangle, [this](){ return std::make_unique<ShapesStrategy>(_paint, ShapeType::rectangle); }},
         {StrategyButton::triangle, [this](){return std::make_unique<ShapesStrategy>(_paint, ShapeType::triangle);}},
-        {StrategyButton::move, [this](){return std::make_unique<MoveStrategy>(_paint);}}
+        {StrategyButton::connect, [this](){return std::make_unique<ConnectionStrategy>(_paint);}},
+        {StrategyButton::move, [this](){return std::make_unique<MoveStrategy>(_paint);}},
+        {StrategyButton::erase, [this](){return std::make_unique<DeleteStrategy>(_paint);}}
     }; 
 
     void strategyButtonPressed();
     QPushButton* createStrategyButton(const QString& title, const StrategyButton type);
     void buttonHighlighter();
+
+private slots:
+    void saveFile();  // Слот для сохранения
+    void loadFile();  // Слот для загрузки
 };
 

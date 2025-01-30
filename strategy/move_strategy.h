@@ -18,7 +18,6 @@ public:
 
 protected:
     void cancel() override;
-    DefaultShape* findShape(const QPoint& pos) const;
 private:
     ShapeType _type;
 
@@ -27,5 +26,4 @@ private:
     QPoint _startPoint;
     QPoint _endPoint;
     bool _isMove;
-    bool _isRMBPressed;
 };

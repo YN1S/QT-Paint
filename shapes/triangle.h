@@ -5,8 +5,8 @@
 class Triangle: public DefaultShape
 {
 public:
-    Triangle(const QRect& rect = {});
-    virtual ~Triangle() = default;
+    Triangle(const QPolygon& rect = {});
+    ~Triangle() = default;
 
     void draw(QPainter* painter) override;
     bool contains(const QPoint& point) const override;
@@ -15,6 +15,7 @@ public:
     QPoint center() const override;
     QRect boundingRect() const override;
 
+    QJsonObject toJson() const override; 
 private:
-    QRect _rect;
+    QPolygon _polygon;
 };

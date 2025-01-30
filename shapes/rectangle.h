@@ -6,7 +6,7 @@ class Rectangle: public DefaultShape
 {
 public:
     Rectangle(const QRect& rect = {});
-    virtual ~Rectangle() = default;
+    ~Rectangle() = default;
 
     void draw(QPainter* painter) override;
     bool contains(const QPoint& point) const override;
@@ -15,6 +15,7 @@ public:
     QPoint center() const override;
     QRect boundingRect() const override;
 
+    QJsonObject toJson() const override; 
 private:
     QRect _rect;
 };

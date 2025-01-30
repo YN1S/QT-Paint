@@ -1,3 +1,5 @@
+#include <QFileDialog>
+
 #include "mywindow.h"
 #include "paint.h"
 
@@ -21,12 +23,28 @@ QToolBar* MyWindow::createLayout()
     QPushButton* triangleButton = createStrategyButton("Треугольник", StrategyButton::triangle);
     QPushButton* ellipseButton = createStrategyButton("Эллипс", StrategyButton::ellipse);
     QPushButton* moveButton = createStrategyButton("Переместить", StrategyButton::move);
+    QPushButton* connectButton = createStrategyButton("Связь", StrategyButton::connect);
+    QPushButton* deleteButton = createStrategyButton("Удалить", StrategyButton::erase);
+
+    QPushButton* saveButton = new QPushButton("Сохранить");
+    QPushButton* loadButton = new QPushButton("Загрузить");
+
+    // Подключаем слоты для этих кнопок
+    connect(saveButton, &QPushButton::clicked, this, &MyWindow::saveFile);
+    connect(loadButton, &QPushButton::clicked, this, &MyWindow::loadFile);
 
     toolbar->addWidget(rectangleButton);
     toolbar->addWidget(triangleButton);
     toolbar->addWidget(ellipseButton);
     toolbar->addSeparator();
+    toolbar->addWidget(connectButton);
+    toolbar->addSeparator();
     toolbar->addWidget(moveButton);
+    toolbar->addWidget(deleteButton);
+    toolbar->addSeparator();
+    toolbar->addWidget(saveButton);
+    toolbar->addWidget(loadButton);
+
 
     return toolbar;
 }
@@ -65,4 +83,26 @@ void MyWindow::buttonHighlighter()
     // Включаем у кнопки-sender
     QPushButton* senderBut = qobject_cast<QPushButton*>(sender());
     senderBut->setChecked(true);
+}
+
+void MyWindow::saveFile()
+{
+    // Открываем диалоговое окно для выбора файла для сохранения
+    QString fileName = QFileDialog::getSaveFileName(this, "Сохранить файл", "", "JSON Files (*.json);;All Files (*)");
+
+    if (!fileName.isEmpty()) {
+        QFile file(fileName);
+        _paint->saveToFile(file);
+    }
+}
+
+void MyWindow::loadFile()
+{
+    // Открываем диалоговое окно для выбора файла для загрузки
+    QString fileName = QFileDialog::getOpenFileName(this, "Загрузить файл", "", "JSON Files (*.json);;All Files (*)");
+
+    if (!fileName.isEmpty()) {
+        QFile file(fileName);
+        _paint->loadFromFile(file);
+    }
 }

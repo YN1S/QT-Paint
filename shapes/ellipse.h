@@ -6,7 +6,7 @@ class Ellipse: public DefaultShape
 {
 public:
     Ellipse(const QRect& rect = {});
-    virtual ~Ellipse() = default;
+    ~Ellipse() = default;
 
     void draw(QPainter* painter) override;
     bool contains(const QPoint& point) const override;
@@ -14,6 +14,8 @@ public:
     void move(const QPoint& delta) override;
     QPoint center() const override;
     QRect boundingRect() const override;
+
+    QJsonObject toJson() const override; 
 
 private:
     QRect _rect;
